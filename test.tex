@@ -1,11 +1,13 @@
 \documentclass{book}
 \usepackage{array}
+\usepackage{enumitem}
 \usepackage{tcolorbox}
 \usepackage{tabularx}
 \usepackage{multicol}
 \usepackage{geometry}
 \usepackage{stix}
 \usepackage{makecell}
+\usepackage{xparse}
 \usepackage{lib/location}
 \usepackage{lib/npc}
 \geometry{margin=.75 in}
@@ -94,35 +96,11 @@
 		\begin{multicols}{2}
 		The infamous publisher of KILL magazine is a genius at shamelessly manipulating ignorant masses and stirring controversy for profit. He is arrogant, aggressive, and boisterous.
 		\end{multicols}
-		\begin{tcolorbox}[
-				notitle,
-				sidebyside,
-				colframe=\colback,
-				sharp corners=all
-			]
-		\newcolumntype{S}{>
-		{\setlength\hsize{2 in}\raggedleft}X}%
-		\begin{tabularx}{3 in}{l S}
-			Aattributes & 
-				Strength B\\
-				Agility D\\
-				Intelligence B\\
-				Empathy A\tabularnewline
-			\hline
-			Health & 4 \tabularnewline
-			\hline
-			Resolve & 6 \tabularnewline
-			\hline
-			Skills &
-				Firearms C\\
-				Manipulation A\\
-				Insight B\tabularnewline
-			\hline
-			Specialities & - \tabularnewline
-			\hline
-			Gear & A shotgun under the desk.\tabularnewline
-		\end{tabularx}
-		\tcblower
-		\end{tcolorbox}
+		\BrNpcAttributes[
+			strength=B,
+			agility=D,
+			intelligence=B,
+			empathy=A,
+		]
 	\end{npc}
 \end{document}
