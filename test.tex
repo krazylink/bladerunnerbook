@@ -7,6 +7,7 @@
 \usepackage{geometry}
 \usepackage{stix}
 \usepackage{makecell}
+\usepackage{pgffor}
 \usepackage{xparse}
 \usepackage{lib/location}
 \usepackage{lib/npc}
@@ -92,15 +93,20 @@
 	\end{multicols}
 	\end{locationbox}
 	
-	\begin{npc}{JELLE SCHYLAR}
-		\begin{multicols}{2}
+	\begin{npc}{JELLE SCHYLAR}		\begin{multicols}{2}
 		The infamous publisher of KILL magazine is a genius at shamelessly manipulating ignorant masses and stirring controversy for profit. He is arrogant, aggressive, and boisterous.
 		\end{multicols}
+		\tcblower
 		\BrNpcAttributes[
 			strength=B,
 			agility=D,
 			intelligence=B,
 			empathy=A,
+			skills = {Firearms B, Maipulation A, Insight B},
+			specialties = {},
+			gear = {A shotgun under his desk.}
 		]
+		%specialtes -
+		%gear a shptgun under his desk.
 	\end{npc}
 \end{document}
