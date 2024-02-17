@@ -1,4 +1,11 @@
 \ExplSyntaxOn
+\newcommand\valueFromLevel[1]
+{
+	\if #1 A \number 12 \fi
+	\if #1 B \number 10 \fi
+	\if #1 C \number 8 \fi
+	\if #1 D \number 6 \fi
+}
 \newtcolorbox{npc}[2][]
 {
 	colbacktitle=black!50!white,
@@ -23,7 +30,6 @@
 	empathy .value_required:n = true,
 }
 \newlist {__br_npc_attributes}{description}{1}
-%\setlist [__br_npc_attributes]
 \cs_new_protected_nopar:Npn \__br_npc_attributes:
 {
 	\begin {__br_npc_attributes}
@@ -31,13 +37,15 @@
 		\item [Agility] \l__agility_tl
 		\item [Intelligence] \l__intelligence_tl
 		\item [Empathy] \l__empathy_tl
+		\item [Health] \number\numexpr(\valueFromLevel{\l__strength_tl}+\valueFromLevel{\l__agility_tl})/4\relax
+		\item [Resolve] \number\numexpr(\valueFromLevel{\l__intelligence_tl}+\valueFromLevel{\l__empathy_tl})/4\relax
 	\end{__br_npc_attributes}
 }
+
 \NewDocumentCommand{\BrNpcAttributes}{o}
 { 
 	\group_begin:
-		\keys_set:nn { br / npc / attributes } {#1}
+		\keys_set:nn { br / npc / attributes }{#1}
 		\__br_npc_attributes:
 	\group_end:
-
 }
