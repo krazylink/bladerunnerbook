@@ -1,11 +1,4 @@
 \ExplSyntaxOn
-\newcommand\valueFromLevel[1]
-{
-	\if #1 A \number 12 \fi
-	\if #1 B \number 10 \fi
-	\if #1 C \number 8 \fi
-	\if #1 D \number 6 \fi
-}
 \newtcolorbox{npc}[2][]
 {
 	colbacktitle=black!50!white,
@@ -14,17 +7,11 @@
 	#1
 }
 
-\cs_new_protected_nopar:Npn \__br_if_npc_attribute:nn #1#2
-{
-		\tl_if_empty:NF {#1}
-		{
-			\item [#2] \foreach \x in #1 { \x\\}
-		}
-	\tl_if_empty:NT {#1} {\item [Skills] ---}
-}
-
 \keys_define:nn { br / npc / attributes }
 {
+	description .tl_set:N = \l__description_tl,
+	description .initial:n = this is a description,
+	description .value_required:n = true,
 	strength .tl_set:N = \l__strength_tl,
 	strength .initial:n = C,
 	strength .value_required:n = true,
@@ -36,81 +23,51 @@
 	intelligence .value_required:n = true,
 	empathy .tl_set:N = \l__empathy_tl, 
 	empathy .initial:n = C,
-	empathy .value_required:n = true,
-	skills .tl_set:N = \l__skills_tl,
-	skills .initial:n = ---,
-	skills .value_required:n = true,
-	specialties .tl_set:N = \l__specialities_tl,
-	specialties .initial:n = ---,
-	specialties .value_required:n = true,
-	gear .tl_set:N = \l__gear_tl,
-	gear .initial:n = ---,
-	gear .value_required:n = true,
+	empathy .value_required:n = true
 }
-\keys_define:nn { br / npc / skills }
-{
-	%strength
-	force .tl_set:N = \l__force_tl,
-	force .initial:n = C,
-	force .value_required:n = true,
-	handtohand .tl_set:N = \l__handtohand_tl,
-	handtohand .initial:n = C,
-	handtohand .value_required:n = true,
-	stamina .tl_set:N = \l__stamina_tl,
-	stamina .initial:n = C,
-	stamina .value_required:n = true,
-	%agility
-	firearms .tl_set:N = \l__firearms_tl,
-	firearms .initial:n = C,
-	firearms .value_required:n = true,
-	mobility .tl_set:N = \l__mobility_tl,
-	mobility .initial:n = C,
-	mobility .value_required:n = true,
-	stealth .tl_set:N = \l__stealth_tl,
-	stealth .initial:n = C,
-	stealth .value_required:n = true,
-	%intelligence
-	medical .tl_set:N = \l__medical_tl,
-	medical .initial:n = C,
-	medical .value_required:n = true,
-	observation .tl_set:N = \l__observation_tl,
-	observation .initial:n = C,
-	observation .value_required:n = true,
-	tech .tl_set:N = \l__tech_tl,
-	tech .initial:n = C,
-	tech .value_required:n = true,
-	%empathy
-	connections .tl_set:N = \l__connections_tl,
-	connections .initial:n = C,
-	connections .value_required:n = true,
-	insight .tl_set:N = \l__insight_tl,
-	insight .initial:n = C,
-	insight .value_required:n = true,
-	manipulation .tl_set:N = \l__manipulation_tl,
-	manipulation .initial:n = C,
-	manipulation .value_required:n = true,
-}
-\newlist {__br_npc_attributes}{description}{1}
+%\newlist {__br_npc_attributes}{description}{1}
+%\setlist [__br_npc_attributes]
 \cs_new_protected_nopar:Npn \__br_npc_attributes:
 {
-	\begin {__br_npc_attributes}
-		\item [Strength] \l__strength_tl
-		\item [Agility] \l__agility_tl
-		\item [Intelligence] \l__intelligence_tl
-		\item [Empathy] \l__empathy_tl
-		\item [Health] \number\numexpr(\valueFromLevel{\l__strength_tl}+\valueFromLevel{\l__agility_tl})/4\relax
-		\item [Resolve] \number\numexpr(\valueFromLevel{\l__intelligence_tl}+\valueFromLevel{\l__empathy_tl})/4\relax
-			\__br_if_npc_attribute:nn {\l__skills_tl} {Skills}
-			\__br_if_npc_attribute:nn {\l__specialities_tl} {Specialties}
-			\__br_if_npc_attribute:nn {\l__gear_tl} {Gear}
-	\end{__br_npc_attributes}
-}
+	\begin{multicols}{2}
+		\l__description_tl
+	\end{multicols}
+	\begin{tabularx}{3.25 in}{|l|X|}
+		\hline
+		Attributes & \makecell[r]{
+		Strength\, \l__strength_tl \\
+		Agility\, \l__agility_tl \\
+		Intelligence\, \l__intelligence_tl \\
+		Empathy\, \l__empathy_tl}\\
+		\hline
+		Health & \makecell[r]{
+			\number\numexpr(
+				\valueFromLevel{\l__strength_tl} + 
+				\valueFromLevel{\l__agility_tl}) /
+				4 \relax
+		}\\
+		\hline
+		Resolve & \makecell[r]{
+			\number\numexpr(
+				\valueFromLevel{\l__intelligence_tl} +
+				\valueFromLevel{\l__empathy_tl}) /
+				4 \relax
+		}\\
+		\hline
+	\end{tabularx}
 
+}
 \NewDocumentCommand{\BrNpcAttributes}{o}
 { 
 	\group_begin:
-		\keys_set:nn { br / npc / attributes }{#1}
+		\keys_set:nn { br / npc / attributes } {#1}
 		\__br_npc_attributes:
 	\group_end:
-}
 
+}
+\newcommand\valueFromLevel[1] {
+	\if #1 A \number 12 \fi
+	\if #1 B \number 10 \fi
+	\if #1 C \number 8 \fi
+	\if #1 D \number 6 \fi
+}
