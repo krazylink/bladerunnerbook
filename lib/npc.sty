@@ -44,26 +44,27 @@
 \cs_new_protected_nopar:Npn \__br_if_npc_attribute:n #1
 {
 	\SetTotalMembers{#1}
-	\setcounter{CurrentMemberCount}{0}
-	\tl_if_empty:NTF {#1}
+	\tl_if_empty:NTF{#1}
 	{---}
 	{
-		\foreach \x in #1 {
-			\stepcounter{CurrentMemberCount}
-			\IfEq {\the\value{TotalMembers}}
-			{\the\value{CurrentMemberCount}}
-			{\x}
-			{\x--}
-			}
+		\readlist\foo #1
+		\makecell[r]{
+			\forloop
+			{CurrentMemberCount}{1}
+			{\value{CurrentMemberCount}<\value{TotalMembers}}{
+				\foo[1]\\}\foo[\value{CurrentMemberCount}]
+		}
 	}
+
 }
+
 \cs_new_protected_nopar:Npn \__br_npc_attributes:
 {
 	\begin{multicols}{2}
 		\l__description_tl
 	\end{multicols}
 	\begin{tabularx}{3.25 in}{|l|X|}
-		\hline
+	\hline
 		Attributes & \makecell[r]{
 		Strength\, \l__strength_tl \\
 		Agility\, \l__agility_tl \\
@@ -84,7 +85,7 @@
 				4 \relax
 		}\\
 		\hline
-		Skills & \makecell[r]{\__br_if_npc_attribute:n \l__skills_tl} \\
+		Skills & \__br_if_npc_attribute:n \l__skills_tl \\
 		\hline
 		Specialties & \makecell[r]{\__br_if_npc_attribute:n \l__specialties_tl} \\
 		\hline
