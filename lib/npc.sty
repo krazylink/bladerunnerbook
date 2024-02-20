@@ -23,10 +23,40 @@
 	intelligence .value_required:n = true,
 	empathy .tl_set:N = \l__empathy_tl, 
 	empathy .initial:n = C,
-	empathy .value_required:n = true
+	empathy .value_required:n = true,
+	skills .tl_set:N = \l__skills_tl,
+	skills .initial:n = these are skills,
+	skills .value_required:n = true,
+	specialties .tl_set:N = \l__specialties_tl,
+	specialties .initial:n = these are skills,
+	specialties .value_required:n = true,
+	gear .tl_set:N = \l__gear_tl,
+	gear .initial:n = these are gear,
+	gear .value_required:n = true,
 }
-%\newlist {__br_npc_attributes}{description}{1}
-%\setlist [__br_npc_attributes]
+\newcounter{TotalMembers}
+\newcommand\SetTotalMembers[1]{
+	\setcounter{TotalMembers}{0}
+	\foreach \x in #1 {\stepcounter{TotalMembers}}
+}
+\newcounter{CurrentMemberCount}
+
+\cs_new_protected_nopar:Npn \__br_if_npc_attribute:n #1
+{
+	\SetTotalMembers{#1}
+	\setcounter{CurrentMemberCount}{0}
+	\tl_if_empty:NTF {#1}
+	{---}
+	{
+		\foreach \x in #1 {
+			\stepcounter{CurrentMemberCount}
+			\IfEq {\the\value{TotalMembers}}
+			{\the\value{CurrentMemberCount}}
+			{\x}
+			{\x--}
+			}
+	}
+}
 \cs_new_protected_nopar:Npn \__br_npc_attributes:
 {
 	\begin{multicols}{2}
@@ -53,6 +83,12 @@
 				\valueFromLevel{\l__empathy_tl}) /
 				4 \relax
 		}\\
+		\hline
+		Skills & \makecell[r]{\__br_if_npc_attribute:n \l__skills_tl} \\
+		\hline
+		Specialties & \makecell[r]{\__br_if_npc_attribute:n \l__specialties_tl} \\
+		\hline
+		Gear & \makecell[r]{\__br_if_npc_attribute:n \l__gear_tl} \\
 		\hline
 	\end{tabularx}
 
