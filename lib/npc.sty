@@ -3,6 +3,7 @@
 {
 	colbacktitle=black!50!white,
 	coltitle=white,
+	colframe=white,
 	title=#2,
 	#1
 }
@@ -33,6 +34,9 @@
 	gear .tl_set:N = \l__gear_tl,
 	gear .initial:n = these are gear,
 	gear .value_required:n = true,
+	picture .tl_set:N = \l__picture_tl,
+	picture .initial:n = example-image.pdf,
+	picture .value_required:n = true,
 }
 \newcounter{TotalMembers}
 \newcommand\SetTotalMembers[1]{
@@ -63,36 +67,36 @@
 	\begin{multicols}{2}
 		\l__description_tl
 	\end{multicols}
-	\begin{tabularx}{3.25 in}{|l|X|}
-	\hline
+	\begin{multicols}{2}
+	\begin{tabularx}{\linewidth}{p{.30\linewidth} X}
 		Attributes & \makecell[r]{
 		Strength\, \l__strength_tl \\
 		Agility\, \l__agility_tl \\
 		Intelligence\, \l__intelligence_tl \\
-		Empathy\, \l__empathy_tl}\\
-		\hline
+		Empathy\, \l__empathy_tl} \\
+	\hline
 		Health & \makecell[r]{
 			\number\numexpr(
 				\valueFromLevel{\l__strength_tl} + 
 				\valueFromLevel{\l__agility_tl}) /
 				4 \relax
-		}\\
-		\hline
+			}\\
+			\hline
 		Resolve & \makecell[r]{
 			\number\numexpr(
 				\valueFromLevel{\l__intelligence_tl} +
 				\valueFromLevel{\l__empathy_tl}) /
 				4 \relax
-		}\\
-		\hline
+			}\\
+			\hline
 		Skills & \__br_if_npc_attribute:n \l__skills_tl \\
 		\hline
-		Specialties & \makecell[r]{\__br_if_npc_attribute:n \l__specialties_tl} \\
+		Specialties & \__br_if_npc_attribute:n \l__specialties_tl \\
 		\hline
-		Gear & \makecell[r]{\__br_if_npc_attribute:n \l__gear_tl} \\
-		\hline
-	\end{tabularx}
-
+		Gear & \__br_if_npc_attribute:n \l__gear_tl \\
+	\end{tabularx} \vfill\null \columnbreak
+		\fitbox[maxwidth=.5\textwidth, maxheight=13\baselineskip]{\includegraphics[left]{\l__picture_tl}}
+	\end{multicols}
 }
 \NewDocumentCommand{\BrNpcAttributes}{o}
 { 
